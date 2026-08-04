@@ -12,11 +12,7 @@ class Config:
     )
 
 
-    SQLALCHEMY_DATABASE_URI = (
-        "mysql+pymysql://"
-        "root:@127.0.0.1:3306/"
-        "tollcare_helpdesk"
-    )
+    SQLALCHEMY_DATABASE_URI = os.getenv("MYSQL_PUBLIC_URL")
 
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
