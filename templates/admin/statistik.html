@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Statistik - TollCare</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<script
+src="https://cdn.jsdelivr.net/npm/chart.js">
+</script>
+
+</head>
+
+<body>
+
+<div id="loading">
+
+    <div class="loader"></div>
+
+</div>
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+
+            <i class="fa-solid fa-road"></i>
+
+        </div>
+
+        <div>
+
+            <h2>TollCare</h2>
+
+            <span>HELPDESK SYSTEM</span>
+
+        </div>
+
+    </div>
+
+    <a href="/admin/profile" class="profile-card">
+
+       {% if admin and admin.photo and admin.photo != "default.png" %}
+
+        <img
+        src="{{ url_for('static', filename='uploads/admin/' + admin.photo) }}">
+
+        {% else %}
+
+        <img
+        src="{{ url_for('static', filename='uploads/admin/default.png') }}">
+
+        {% endif %}
+
+        <div>
+
+            <h4>{{ admin.fullname }}</h4>
+
+            <p>Administrator</p>
+
+        </div>
+
+    </a>
+
+    <ul class="menu">
+
+        <li>
+
+            <a href="/admin">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/laporan">
+
+                <i class="fa-solid fa-ticket"></i>
+
+                <span>Data Laporan</span>
+
+            </a>
+
+        </li>
+
+        <li class="active">
+
+            <a href="/admin/statistik">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                <span>Statistik</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/export/pdf">
+
+                <i class="fa-solid fa-file-pdf"></i>
+
+                <span>Export PDF</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/export/excel">
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                <span>Export Excel</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/admin/profile">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profil Admin</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="content">
+
+<header class="topbar">
+
+    <div>
+
+        <h1>Statistik Laporan</h1>
+
+        <p>Analisis Data TollCare Helpdesk</p>
+
+    </div>
+
+    <div class="top-right">
+
+        <a
+        href="/admin"
+        class="btn btn-primary">
+
+            <i class="fa-solid fa-house"></i>
+
+            Dashboard
+
+        </a>
+
+        <a
+        href="/admin/export/pdf"
+        class="btn btn-danger">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            PDF
+
+        </a>
+
+        <a
+        href="/admin/export/excel"
+        class="btn btn-success">
+
+            <i class="fa-solid fa-file-excel"></i>
+
+            Excel
+
+        </a>
+
+        <a
+        href="/logout"
+        class="btn btn-secondary">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</header>
+
+<!-- Cards -->
+
+<div class="cards">
+
+    <div class="card-item">
+
+        <div class="card-icon blue">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+        </div>
+
+        <div class="card-info">
+
+            <h5>Total Laporan</h5>
+
+            <h2>{{ total }}</h2>
+
+            <p>Seluruh laporan</p>
+
+        </div>
+
+    </div>
+
+    <div class="card-item">
+
+        <div class="card-icon red">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+        </div>
+
+        <div class="card-info">
+
+            <h5>Open</h5>
+
+            <h2>{{ open_count }}</h2>
+
+            <p>Belum diproses</p>
+
+        </div>
+
+    </div>
+
+    <div class="card-item">
+
+        <div class="card-icon orange">
+
+            <i class="fa-solid fa-spinner"></i>
+
+        </div>
+
+        <div class="card-info">
+
+            <h5>Diproses</h5>
+
+            <h2>{{ process_count }}</h2>
+
+            <p>Sedang diproses</p>
+
+        </div>
+
+    </div>
+
+    <div class="card-item">
+
+        <div class="card-icon green">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+        </div>
+
+        <div class="card-info">
+
+            <h5>Selesai</h5>
+
+            <h2>{{ done_count }}</h2>
+
+            <p>Sudah selesai</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Grafik + Ringkasan -->
+
+<div class="dashboard-grid">
+
+    <div class="chart-box">
+
+        <div class="box-header">
+
+            <h3>
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                Statistik Status Laporan
+
+            </h3>
+
+        </div>
+
+        <div class="chart-content">
+
+            <canvas id="barChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="summary-box">
+
+        <h3>Ringkasan</h3>
+
+        <div class="summary-item">
+
+            <span>Total Laporan</span>
+
+            <strong>{{ total }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Open</span>
+
+            <strong>{{ open_count }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Diproses</span>
+
+            <strong>{{ process_count }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Selesai</span>
+
+            <strong>{{ done_count }}</strong>
+
+        </div>
+
+        <hr>
+
+        <h5 class="mb-3">
+
+            Tingkat Penyelesaian
+
+        </h5>
+
+        <div class="progress" style="height:22px;">
+
+            <div
+                id="progressDone"
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width:0%;">
+
+                0%
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Pie Chart + Informasi -->
+
+<div class="dashboard-grid mt-4">
+
+    <div class="chart-box">
+
+        <div class="box-header">
+
+            <h3>
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+                Persentase Status
+
+            </h3>
+
+        </div>
+
+        <div class="chart-content">
+
+            <canvas id="pieChart"></canvas>
+
+        </div>
+
+    </div>
+
+    <div class="summary-box">
+
+        <h3>Informasi Sistem</h3>
+
+        <div class="summary-item">
+
+            <span>Total Tiket</span>
+
+            <strong>{{ total }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Laporan Aktif</span>
+
+            <strong>{{ open_count + process_count }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Laporan Selesai</span>
+
+            <strong>{{ done_count }}</strong>
+
+        </div>
+
+        <div class="summary-item">
+
+            <span>Administrator</span>
+
+            <strong>{{ admin.fullname }}</strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="footer">
+
+    <div>
+
+        © 2026 TollCare Helpdesk
+
+    </div>
+
+    <div>
+
+        Sistem Helpdesk Terpadu
+
+    </div>
+
+</footer>
+
+</div>
+
+<script>
+
+const openCount = Number("{{ open_count }}");
+
+const processCount = Number("{{ process_count }}");
+
+const doneCount = Number("{{ done_count }}");
+
+const totalCount = Number("{{ total }}");
+
+
+// ==========================
+// Progress Bar
+// ==========================
+
+const progress = document.getElementById("progressDone");
+
+if(progress){
+
+    let percent = 0;
+
+    if(totalCount > 0){
+
+        percent = Math.round((doneCount / totalCount) * 100);
+
+    }
+
+    progress.style.width = percent + "%";
+
+    progress.innerHTML = percent + "%";
+
+}
+
+
+// ==========================
+// Bar Chart
+// ==========================
+
+new Chart(
+
+document.getElementById("barChart"),
+
+{
+
+type:"bar",
+
+data:{
+
+labels:[
+
+"Open",
+
+"Diproses",
+
+"Selesai"
+
+],
+
+datasets:[{
+
+label:"Jumlah Laporan",
+
+data:[
+
+openCount,
+
+processCount,
+
+doneCount
+
+],
+
+backgroundColor:[
+
+"#ef4444",
+
+"#f59e0b",
+
+"#22c55e"
+
+],
+
+borderRadius:10
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:true,
+
+ticks:{
+
+precision:0
+
+}
+
+}
+
+}
+
+}
+
+}
+
+);
+
+
+// ==========================
+// Pie Chart
+// ==========================
+
+new Chart(
+
+document.getElementById("pieChart"),
+
+{
+
+type:"doughnut",
+
+data:{
+
+labels:[
+
+"Open",
+
+"Diproses",
+
+"Selesai"
+
+],
+
+datasets:[{
+
+data:[
+
+openCount,
+
+processCount,
+
+doneCount
+
+],
+
+backgroundColor:[
+
+"#ef4444",
+
+"#f59e0b",
+
+"#22c55e"
+
+],
+
+hoverOffset:8
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+
+position:"bottom"
+
+}
+
+}
+
+}
+
+}
+
+);
+
+
+
+</script>
+
+<script src="{{ url_for('static', filename='js/loading.js') }}"></script>
+
+</body>
+
+</html>

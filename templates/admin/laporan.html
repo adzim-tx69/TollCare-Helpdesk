@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Data Laporan - TollCare</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+
+<div class="logo-icon">
+
+<i class="fa-solid fa-road"></i>
+
+</div>
+
+<div>
+
+<h2>TollCare</h2>
+
+<span>HELPDESK SYSTEM</span>
+
+</div>
+
+</div>
+
+<a href="/admin/profile" class="profile-card">
+
+    {% if admin.photo and admin.photo != "default.png" %}
+
+    <img
+    src="{{ url_for('static', filename='uploads/admin/' + admin.photo) }}">
+
+    {% else %}
+
+    <img
+    src="{{ url_for('static', filename='uploads/admin/default.png') }}">
+
+    {% endif %}
+
+    <div>
+
+        <h4>{{ admin.fullname }}</h4>
+
+        <p>Administrator</p>
+
+    </div>
+
+</a>
+
+<ul class="menu">
+
+<li>
+
+<a href="/admin">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Dashboard</span>
+
+</a>
+
+</li>
+
+<li class="active">
+
+<a href="/admin/laporan">
+
+<i class="fa-solid fa-ticket"></i>
+
+<span>Data Laporan</span>
+
+</a>
+
+</li>
+
+<li class="{% if request.path == '/admin/laporan' %}active{% endif %}"></li>
+
+<a href="/admin/statistik">
+
+<i class="fa-solid fa-chart-column"></i>
+
+<span>Statistik</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="/admin/export/pdf">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<span>Export PDF</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="/admin/export/pdf">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+<span>Export PDF</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="/admin/profile">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profil Admin</span>
+
+</a>
+
+</li>
+
+<li>
+
+<a href="/logout">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+<span>Logout</span>
+
+</a>
+
+</li>
+
+</ul>
+
+</div>
+
+<div class="content">
+
+<header class="topbar">
+
+<div>
+
+<h1>
+
+Data Laporan
+
+</h1>
+
+<p>
+
+Daftar seluruh laporan masyarakat
+
+</p>
+
+</div>
+
+<div class="top-right">
+
+<a
+href="/admin"
+class="btn btn-primary">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+<a
+href="/admin/export/pdf"
+class="btn btn-success">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Export PDF
+
+</a>
+
+</div>
+
+</header>
+
+<div class="table-box">
+
+<div class="table-header">
+
+<h3>
+
+<i class="fa-solid fa-list"></i>
+
+Semua Laporan
+
+</h3>
+
+<div class="table-tools">
+
+<input
+id="searchInput"
+type="text"
+class="form-control"
+placeholder="Cari laporan...">
+
+<select
+id="statusFilter"
+class="form-select">
+
+<option value="">Semua Status</option>
+
+<option value="Open">Open</option>
+
+<option value="Diproses">Diproses</option>
+
+<option value="Selesai">Selesai</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table align-middle" id="ticketTable">
+
+<thead>
+
+<tr>
+
+<th width="60">No</th>
+
+<th>No Tiket</th>
+
+<th>Pelapor</th>
+
+<th>Gerbang Tol</th>
+
+<th>Kategori</th>
+
+<th>Status</th>
+
+<th>Tanggal</th>
+
+<th width="120">Aksi</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for ticket in tickets %}
+
+<tr>
+
+<td>
+
+{{ loop.index }}
+
+</td>
+
+<td>
+
+<div class="ticket-number">
+
+{{ ticket.ticket_number }}
+
+</div>
+
+</td>
+
+<td>
+
+<div class="user">
+
+<div class="avatar-circle">
+
+{{ ticket.fullname[0]|upper }}
+
+</div>
+
+<div>
+
+<h6 class="mb-0">
+
+{{ ticket.fullname }}
+
+</h6>
+
+<small class="text-muted">
+
+{{ ticket.phone }}
+
+</small>
+
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+{{ ticket.toll_gate }}
+
+</td>
+
+<td>
+
+{{ ticket.category }}
+
+</td>
+
+<td>
+
+{% if ticket.status == "Open" %}
+
+<span class="status danger">
+
+Open
+
+</span>
+
+{% elif ticket.status == "Diproses" %}
+
+<span class="status warning">
+
+Diproses
+
+</span>
+
+{% else %}
+
+<span class="status success">
+
+Selesai
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>
+
+{{ ticket.created_at.strftime("%d/%m/%Y") }}
+
+<br>
+
+<small class="text-muted">
+
+{{ ticket.created_at.strftime("%H:%M") }}
+
+</small>
+
+</td>
+
+<td>
+
+<a
+href="{{ url_for('ticket_detail', id=ticket.id) }}"
+class="btn btn-primary btn-sm">
+
+<i class="fa-solid fa-eye"></i>
+
+Detail
+
+</a>
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+
+<td colspan="8" class="text-center py-5">
+
+<i class="fa-solid fa-folder-open fa-3x text-secondary mb-3"></i>
+
+<h5>
+
+Belum ada laporan.
+
+</h5>
+
+<p class="text-muted">
+
+Data laporan akan muncul di sini.
+
+</p>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<footer class="footer">
+
+<div>
+
+© 2026 TollCare Helpdesk
+
+</div>
+
+<div>
+
+Sistem Helpdesk Terpadu
+
+</div>
+
+</footer>
+
+</div>
+
+<script>
+
+const searchInput = document.getElementById("searchInput");
+
+const statusFilter = document.getElementById("statusFilter");
+
+function filterTable(){
+
+    const keyword = searchInput.value.toLowerCase();
+
+    const status = statusFilter.value.toLowerCase();
+
+    const rows = document.querySelectorAll("#ticketTable tbody tr");
+
+    rows.forEach(function(row){
+
+        const text = row.innerText.toLowerCase();
+
+        const rowStatus = row.cells[5]
+            ? row.cells[5].innerText.toLowerCase()
+            : "";
+
+        const matchKeyword = text.includes(keyword);
+
+        const matchStatus =
+            status === "" ||
+            rowStatus.includes(status);
+
+        row.style.display =
+            (matchKeyword && matchStatus)
+            ? ""
+            : "none";
+
+    });
+
+}
+
+searchInput.addEventListener(
+
+    "keyup",
+
+    filterTable
+
+);
+
+statusFilter.addEventListener(
+
+    "change",
+
+    filterTable
+
+);
+
+</script>
+
+</body>
+
+</html>

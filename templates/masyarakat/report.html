@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Buat Laporan</title>
+
+<link 
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+</head>
+
+
+<body class="bg-light">
+
+
+<div class="container mt-5">
+
+
+<div class="card shadow">
+
+
+<div class="card-header bg-primary text-white">
+
+<h3>
+Buat Laporan Kerusakan Jalan Tol
+</h3>
+
+</div>
+
+
+
+<div class="card-body">
+
+
+<!-- FLASH MESSAGE -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }}">
+
+{{ message }}
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+
+
+
+<form
+
+method="POST"
+
+action="{{ url_for('report') }}"
+
+enctype="multipart/form-data">
+
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Nama Pelapor
+
+</label>
+
+
+<input
+
+type="text"
+
+class="form-control"
+
+name="fullname"
+
+required>
+
+</div>
+
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Nomor HP
+
+</label>
+
+
+<input
+
+type="text"
+
+class="form-control"
+
+name="phone"
+
+required>
+
+</div>
+
+
+
+
+
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Gerbang Tol
+
+</label>
+
+
+<select
+
+class="form-select"
+
+name="toll_gate"
+
+required>
+
+
+<option value="">
+
+-- Pilih Gerbang Tol --
+
+</option>
+
+
+<option>
+
+Cikampek Utama
+
+</option>
+
+
+<option>
+
+Cibubur
+
+</option>
+
+
+<option>
+
+Jagorawi
+
+</option>
+
+
+<option>
+
+Halim
+
+</option>
+
+
+<option>
+
+Bekasi Barat
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+
+Kategori
+
+</label>
+
+
+<select
+
+class="form-select"
+
+name="category"
+
+required>
+
+
+<option value="">
+
+-- Pilih Kategori --
+
+</option>
+
+
+<option>
+
+Kerusakan Jalan
+
+</option>
+
+
+<option>
+
+Lampu Mati
+
+</option>
+
+
+<option>
+
+Gerbang Tol Rusak
+
+</option>
+
+
+<option>
+
+Kecelakaan
+
+</option>
+
+
+<option>
+
+Lainnya
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+
+Deskripsi
+
+</label>
+
+
+<textarea
+
+class="form-control"
+
+rows="5"
+
+name="description"
+
+required></textarea>
+
+
+</div>
+
+
+
+
+
+
+
+<div class="mb-3">
+
+
+<label class="form-label">
+
+Upload Foto
+
+</label>
+
+
+<input
+
+type="file"
+
+class="form-control"
+
+name="photo"
+
+accept="image/*">
+
+
+<div class="form-text">
+
+Pilih foto dari kamera/gallery (JPG, PNG, WEBP)
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<button
+
+type="submit"
+
+class="btn btn-primary">
+
+
+Kirim Laporan
+
+
+</button>
+
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tracking Laporan</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-success text-white">
+
+                    <h3>
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        Tracking Laporan
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="GET" action="/tracking">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+
+                                Nomor Tiket
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="ticket_number"
+                                class="form-control"
+                                value="{{ ticket_number if ticket_number else '' }}"
+                                placeholder="Contoh : JM-20260803123456"
+                                required>
+
+                        </div>
+
+                        <button class="btn btn-success">
+
+                            <i class="fa-solid fa-search"></i>
+
+                            Cari
+
+                        </button>
+
+                        <a href="/"
+                           class="btn btn-secondary">
+
+                            Beranda
+
+                        </a>
+
+                    </form>
+
+                    <hr>
+
+                    {% if ticket %}
+
+                    <div class="card">
+
+                        <div class="card-header bg-primary text-white">
+
+                            Hasil Tracking
+
+                        </div>
+
+                        <div class="card-body">
+
+                            <table class="table table-bordered">
+
+                                <tr>
+
+                                    <th width="220">Nomor Tiket</th>
+
+                                    <td>{{ ticket.ticket_number }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Nama Pelapor</th>
+
+                                    <td>{{ ticket.fullname }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Gerbang Tol</th>
+
+                                    <td>{{ ticket.toll_gate }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Kategori</th>
+
+                                    <td>{{ ticket.category }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Status</th>
+
+                                    <td>
+
+                                        {% if ticket.status=="Open" %}
+
+                                        <span class="badge bg-danger">
+                                            Open
+                                        </span>
+
+                                        {% elif ticket.status=="Diproses" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            Diproses
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="badge bg-success">
+                                            Selesai
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Teknisi</th>
+
+                                    <td>{{ ticket.technician or "-" }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Catatan</th>
+
+                                    <td>{{ ticket.repair_note or "-" }}</td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Foto Laporan</th>
+
+                                    <td>
+
+                                        {% if ticket.photo %}
+
+                                        <img
+                                            src="{{ url_for('uploaded_file', filename=ticket.photo) }}"
+                                            class="img-fluid rounded"
+                                            style="max-width:400px;">
+
+                                        {% else %}
+
+                                        Tidak ada foto
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>Foto Perbaikan</th>
+
+                                    <td>
+
+                                        {% if ticket.repair_photo %}
+
+                                        <img
+                                            src="{{ url_for('uploaded_file', filename=ticket.repair_photo) }}"
+                                            class="img-fluid rounded"
+                                            style="max-width:400px;">
+
+                                        {% else %}
+
+                                        Belum ada foto perbaikan
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                    {% elif ticket_number %}
+
+                    <div class="alert alert-danger">
+
+                        Nomor tiket tidak ditemukan.
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="alert alert-info">
+
+                        Masukkan nomor tiket untuk melihat status laporan.
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
