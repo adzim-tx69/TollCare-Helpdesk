@@ -5,144 +5,246 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>TollCare Helpdesk</title>
 
+
     <!-- Bootstrap -->
+
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
 
+
     <!-- Font Awesome -->
+
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet">
 
+
     <!-- CSS utama -->
+
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}">
 
+
     <style>
 
-        /* =========================================
-           HALAMAN UTAMA
-        ========================================= */
+
+        /* =================================================
+           BODY HOMEPAGE
+        ================================================= */
+
+        body {
+            background: #eef3fb;
+        }
+
+
+        /* =================================================
+           WRAPPER
+        ================================================= */
 
         .home-wrapper {
+
             width: 100%;
+
             max-width: 1100px;
+
             margin: 60px auto;
+
             padding: 0 20px;
+
         }
 
 
-        /* =========================================
+        /* =================================================
            HEADER
-        ========================================= */
+        ================================================= */
 
         .home-header {
+
             text-align: center;
+
             margin-bottom: 50px;
+
         }
+
 
         .home-header h1 {
+
             font-size: 42px;
+
             font-weight: 700;
+
             color: #0d6efd;
+
             margin-bottom: 15px;
+
         }
+
 
         .home-header p {
+
             font-size: 18px;
+
             color: #64748b;
+
             margin: 0;
+
         }
 
 
-        /* =========================================
-           3 CARD UTAMA
-        ========================================= */
+        /* =================================================
+           MENU GRID
+        ================================================= */
 
         .home-menu {
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
             gap: 25px;
+
+            width: 100%;
+
             align-items: stretch;
+
         }
 
 
-        /* =========================================
-           CARD
-        ========================================= */
+        /* =================================================
+           CARD UTAMA
+        ================================================= */
 
         .home-menu-card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 35px 25px;
+
+            position: relative;
+
+            width: 100%;
 
             min-height: 350px;
 
+            padding: 35px 25px;
+
+            background: #ffffff;
+
+            border-radius: 18px;
+
             display: flex;
+
             flex-direction: column;
 
             text-align: center;
 
             box-shadow:
-                0 10px 30px rgba(0, 0, 0, 0.08);
+                0 8px 20px
+                rgba(0, 0, 0, 0.08);
 
-            transition: all 0.3s ease;
+            border: 2px solid transparent;
+
+            cursor: pointer;
+
+            z-index: 1;
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                border-color 0.35s ease;
+
         }
 
+
+        /* =================================================
+           HOVER CARD
+        ================================================= */
 
         .home-menu-card:hover {
-            transform: translateY(-6px);
+
+            transform:
+                translateY(-12px);
 
             box-shadow:
-                0 18px 35px rgba(0, 0, 0, 0.12);
+                0 25px 50px
+                rgba(37, 99, 235, 0.25);
+
+            border-color:
+                rgba(37, 99, 235, 0.15);
+
+            z-index: 10;
+
         }
 
 
-        /* =========================================
+        /* =================================================
            ICON
-        ========================================= */
+        ================================================= */
 
         .home-menu-icon {
+
             height: 80px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             margin-bottom: 20px;
+
         }
+
 
         .home-menu-icon i {
+
             font-size: 55px;
+
+            transition:
+                transform 0.35s ease;
+
         }
 
 
-        /* =========================================
+        /* ICON HOVER */
+
+        .home-menu-card:hover
+        .home-menu-icon i {
+
+            transform:
+                scale(1.18);
+
+        }
+
+
+        /* =================================================
            JUDUL
-        ========================================= */
+        ================================================= */
 
         .home-menu-card h4 {
+
             font-size: 23px;
+
             font-weight: 700;
+
+            color: #1e293b;
 
             margin-bottom: 15px;
 
-            color: #1e293b;
         }
 
 
-        /* =========================================
+        /* =================================================
            DESKRIPSI
-        ========================================= */
+        ================================================= */
 
         .home-menu-description {
+
             min-height: 55px;
 
             color: #64748b;
@@ -152,19 +254,29 @@
             line-height: 1.6;
 
             margin-bottom: 25px;
+
         }
 
 
-        /* =========================================
-           AREA BUTTON
-        ========================================= */
+        /* =================================================
+           BUTTON AREA
+        ================================================= */
 
         .home-menu-button {
+
             margin-top: auto;
+
         }
 
 
+        /* =================================================
+           BUTTON
+        ================================================= */
+
         .home-menu-button a {
+
+            display: inline-block;
+
             min-width: 160px;
 
             padding: 12px 20px;
@@ -172,82 +284,123 @@
             border-radius: 10px;
 
             font-weight: 600;
+
+            text-decoration: none;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
         }
 
 
-        /* =========================================
+        /* BUTTON HOVER */
+
+        .home-menu-button a:hover {
+
+            transform:
+                translateY(-4px);
+
+            box-shadow:
+                0 10px 22px
+                rgba(0, 0, 0, 0.20);
+
+        }
+
+
+        /* =================================================
            INFO
-        ========================================= */
+        ================================================= */
 
         .home-info {
+
             margin-top: 35px;
+
             text-align: center;
+
         }
 
 
-        /* =========================================
+        /* =================================================
            FOOTER
-        ========================================= */
+        ================================================= */
 
         .home-footer {
+
             margin-top: 45px;
 
             padding-top: 25px;
 
-            border-top: 1px solid #dee2e6;
+            border-top:
+                1px solid #dee2e6;
 
             text-align: center;
 
             color: #94a3b8;
 
             font-size: 14px;
+
         }
 
 
-        /* =========================================
+        /* =================================================
            TABLET
-        ========================================= */
+        ================================================= */
 
         @media (max-width: 900px) {
 
             .home-menu {
-                grid-template-columns: repeat(2, 1fr);
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+
             }
 
         }
 
 
-        /* =========================================
+        /* =================================================
            HP
-        ========================================= */
+        ================================================= */
 
         @media (max-width: 600px) {
 
             .home-wrapper {
+
                 margin: 30px auto;
+
             }
 
 
             .home-header h1 {
+
                 font-size: 32px;
+
             }
 
 
             .home-header p {
+
                 font-size: 16px;
+
             }
 
 
             .home-menu {
+
                 grid-template-columns: 1fr;
+
             }
 
 
             .home-menu-card {
+
                 min-height: 320px;
+
             }
 
         }
+
 
     </style>
 
@@ -260,11 +413,12 @@
 <div class="home-wrapper">
 
 
-    <!-- =====================================
+    <!-- =================================================
          HEADER
-    ====================================== -->
+    ================================================= -->
 
     <div class="home-header">
+
 
         <h1>
 
@@ -282,20 +436,21 @@
 
         </p>
 
+
     </div>
 
 
 
-    <!-- =====================================
+    <!-- =================================================
          MENU
-    ====================================== -->
+    ================================================= -->
 
     <div class="home-menu">
 
 
-        <!-- =================================
+        <!-- =================================================
              BUAT LAPORAN
-        ================================== -->
+        ================================================= -->
 
         <div class="home-menu-card">
 
@@ -303,7 +458,9 @@
             <div class="home-menu-icon">
 
                 <i
-                    class="fa-solid fa-triangle-exclamation text-danger">
+                    class="fa-solid
+                    fa-triangle-exclamation
+                    text-danger">
                 </i>
 
             </div>
@@ -330,7 +487,10 @@
                     href="/report"
                     class="btn btn-primary">
 
-                    <i class="fa-solid fa-file-circle-plus"></i>
+                    <i
+                        class="fa-solid
+                        fa-file-circle-plus">
+                    </i>
 
                     Buat Laporan
 
@@ -343,9 +503,9 @@
 
 
 
-        <!-- =================================
+        <!-- =================================================
              TRACKING
-        ================================== -->
+        ================================================= -->
 
         <div class="home-menu-card">
 
@@ -353,7 +513,9 @@
             <div class="home-menu-icon">
 
                 <i
-                    class="fa-solid fa-magnifying-glass text-success">
+                    class="fa-solid
+                    fa-magnifying-glass
+                    text-success">
                 </i>
 
             </div>
@@ -380,7 +542,10 @@
                     href="/tracking"
                     class="btn btn-success">
 
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i
+                        class="fa-solid
+                        fa-magnifying-glass">
+                    </i>
 
                     Tracking
 
@@ -393,9 +558,9 @@
 
 
 
-        <!-- =================================
+        <!-- =================================================
              ADMIN
-        ================================== -->
+        ================================================= -->
 
         <div class="home-menu-card">
 
@@ -403,7 +568,9 @@
             <div class="home-menu-icon">
 
                 <i
-                    class="fa-solid fa-user-shield text-dark">
+                    class="fa-solid
+                    fa-user-shield
+                    text-dark">
                 </i>
 
             </div>
@@ -430,7 +597,10 @@
                     href="/login"
                     class="btn btn-dark">
 
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <i
+                        class="fa-solid
+                        fa-right-to-bracket">
+                    </i>
 
                     Login Admin
 
@@ -446,35 +616,43 @@
 
 
 
-    <!-- =====================================
+    <!-- =================================================
          INFO
-    ====================================== -->
+    ================================================= -->
 
     <div class="home-info">
 
+
         <div class="alert alert-info">
 
-            <i class="fa-solid fa-circle-info"></i>
+            <i
+                class="fa-solid
+                fa-circle-info">
+            </i>
 
-            Gunakan menu di atas sesuai kebutuhan Anda.
+            Gunakan menu di atas
+            sesuai kebutuhan Anda.
 
         </div>
+
 
     </div>
 
 
 
-    <!-- =====================================
+    <!-- =================================================
          FOOTER
-    ====================================== -->
+    ================================================= -->
 
     <div class="home-footer">
+
 
         <div>
 
             © 2026 TollCare Helpdesk
 
         </div>
+
 
         <div>
 
@@ -483,10 +661,12 @@
 
         </div>
 
+
     </div>
 
 
 </div>
+
 
 
 <!-- Bootstrap JS -->

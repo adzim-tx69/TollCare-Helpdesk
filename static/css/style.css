@@ -1239,17 +1239,3 @@ table td {
     }
 
 }
-
-/* =========================================
-   HOVER CARD HOMEPAGE
-========================================= */
-
-.home-menu-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-}
-
-.home-menu-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 18px 35px rgba(37, 99, 235, 0.18);
-}
