@@ -476,25 +476,11 @@ def report():
         # NOMOR TIKET
         # ==========================
 
-        ticket_number = (
+        tanggal = waktu_wib().strftime("%y%m%d")
 
-            "JM-"
+        jumlah = Ticket.query.count() + 1
 
-            +
-
-            waktu_wib().strftime(
-                "%Y%m%d%H%M%S"
-            )
-
-            +
-
-            "-"
-
-            +
-
-            uuid.uuid4().hex[:4].upper()
-
-        )
+        ticket_number = f"TC-{tanggal}-{jumlah:03d}"
 
 
 
