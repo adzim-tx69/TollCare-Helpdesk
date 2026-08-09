@@ -5,70 +5,1088 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <title>Profil Admin</title>
+    <title>Profil Admin - TollCare Helpdesk</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-          rel="stylesheet">
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            font-family: 'Poppins', sans-serif;
+
+            background: #f3f6fb;
+
+            color: #172b4d;
+
+            min-height: 100vh;
+
+        }
+
+
+        /* =====================================================
+           TOPBAR
+        ===================================================== */
+
+        .topbar {
+
+            height: 88px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #dfe4ea;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 45px;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+        }
+
+
+        .menu-toggle {
+
+            border: none;
+
+            background: transparent;
+
+            font-size: 30px;
+
+            color: #506070;
+
+            cursor: pointer;
+
+            margin-right: 35px;
+
+            width: 45px;
+
+            height: 45px;
+
+        }
+
+
+        .menu-toggle:hover {
+
+            color: #2563eb;
+
+        }
+
+
+        .top-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .top-logo-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 22px;
+
+        }
+
+
+        .top-logo h2 {
+
+            margin: 0;
+
+            color: #2563eb;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 0;
+
+            left: -360px;
+
+            width: 360px;
+
+            height: 100vh;
+
+            background: #343a40;
+
+            color: white;
+
+            z-index: 9999;
+
+            transition: left .3s ease;
+
+            overflow-y: auto;
+
+        }
+
+
+        .sidebar.show {
+
+            left: 0;
+
+        }
+
+
+        .sidebar-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,.35);
+
+            z-index: 9998;
+
+            display: none;
+
+        }
+
+
+        .sidebar-overlay.show {
+
+            display: block;
+
+        }
+
+
+        /* =====================================================
+           SIDEBAR HEADER
+        ===================================================== */
+
+        .sidebar-header {
+
+            padding: 35px 25px;
+
+            border-bottom: 1px solid rgba(255,255,255,.15);
+
+        }
+
+
+        .sidebar-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+
+        .sidebar-logo-icon {
+
+            width: 60px;
+
+            height: 60px;
+
+            border-radius: 12px;
+
+            background: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 30px;
+
+            color: white;
+
+        }
+
+
+        .sidebar-logo h2 {
+
+            margin: 0;
+
+            color: white;
+
+            font-size: 28px;
+
+        }
+
+
+        .sidebar-logo span {
+
+            font-size: 13px;
+
+            color: #cbd5e1;
+
+            letter-spacing: 1px;
+
+        }
+
+
+        /* =====================================================
+           PROFILE SIDEBAR
+        ===================================================== */
+
+        .sidebar-profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 25px;
+
+            border-bottom: 1px solid rgba(255,255,255,.15);
+
+            text-decoration: none;
+
+            color: white;
+
+        }
+
+
+        .sidebar-profile img {
+
+            width: 58px;
+
+            height: 58px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 2px solid white;
+
+        }
+
+
+        .sidebar-profile h4 {
+
+            margin: 0;
+
+            font-size: 18px;
+
+        }
+
+
+        .sidebar-profile p {
+
+            margin: 4px 0 0;
+
+            color: #cbd5e1;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           MENU
+        ===================================================== */
+
+        .sidebar-menu {
+
+            list-style: none;
+
+            padding: 20px 10px;
+
+            margin: 0;
+
+        }
+
+
+        .sidebar-menu li {
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .sidebar-menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            padding: 15px 25px;
+
+            border-radius: 8px;
+
+            color: #d7dee8;
+
+            text-decoration: none;
+
+            font-size: 17px;
+
+            transition: .2s;
+
+        }
+
+
+        .sidebar-menu a i {
+
+            width: 25px;
+
+            text-align: center;
+
+        }
+
+
+        .sidebar-menu a:hover {
+
+            background: rgba(255,255,255,.08);
+
+            color: white;
+
+        }
+
+
+        .sidebar-menu li.active a {
+
+            background: #2563eb;
+
+            color: white;
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+
+            padding: 45px 7% 50px;
+
+        }
+
+
+        /* =====================================================
+           PAGE HEADER
+        ===================================================== */
+
+        .page-header {
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .page-header h1 {
+
+            font-size: 36px;
+
+            font-weight: 700;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .page-header p {
+
+            font-size: 19px;
+
+            color: #60758f;
+
+            margin: 0;
+
+        }
+
+
+        /* =====================================================
+           PROFILE CARD
+        ===================================================== */
+
+        .profile-card-main {
+
+            background: white;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px rgba(31,45,61,.08);
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .profile-cover {
+
+            height: 145px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #4f7df3
+                );
+
+        }
+
+
+        .profile-content {
+
+            padding: 0 40px 35px;
+
+            text-align: center;
+
+        }
+
+
+        .profile-avatar {
+
+            width: 125px;
+
+            height: 125px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 6px solid white;
+
+            margin-top: -62px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,.15);
+
+        }
+
+
+        .profile-content h2 {
+
+            margin-top: 15px;
+
+            margin-bottom: 5px;
+
+            font-size: 28px;
+
+        }
+
+
+        .profile-content .subtitle {
+
+            color: #718096;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        /* =====================================================
+           PROFILE INFORMATION
+        ===================================================== */
+
+        .profile-info {
+
+            max-width: 650px;
+
+            margin: auto;
+
+            text-align: left;
+
+        }
+
+
+        .info-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 16px 0;
+
+            border-bottom: 1px solid #edf0f4;
+
+        }
+
+
+        .info-row:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .info-row span {
+
+            color: #60758f;
+
+        }
+
+
+        .info-row span i {
+
+            width: 25px;
+
+            color: #2563eb;
+
+        }
+
+
+        .info-row strong {
+
+            color: #172b4d;
+
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .statistics-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 24px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .stat-card {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(31,45,61,.08);
+
+        }
+
+
+        .stat-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            border-radius: 15px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            font-size: 28px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .blue {
+
+            background: #2563eb;
+
+        }
+
+
+        .red {
+
+            background: #ef4444;
+
+        }
+
+
+        .orange {
+
+            background: #f59e0b;
+
+        }
+
+
+        .green {
+
+            background: #10b981;
+
+        }
+
+
+        .stat-info h5 {
+
+            color: #60758f;
+
+            font-size: 15px;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .stat-info h2 {
+
+            font-size: 32px;
+
+            font-weight: 700;
+
+            margin: 0;
+
+            color: #111827;
+
+        }
+
+
+        /* =====================================================
+           ADMIN INFORMATION
+        ===================================================== */
+
+        .admin-panel {
+
+            background: white;
+
+            border-radius: 16px;
+
+            box-shadow:
+                0 8px 25px rgba(31,45,61,.08);
+
+            overflow: hidden;
+
+        }
+
+
+        .panel-header {
+
+            padding: 25px 30px;
+
+            border-bottom: 1px solid #edf0f4;
+
+        }
+
+
+        .panel-header h3 {
+
+            margin: 0;
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+        }
+
+
+        .panel-header i {
+
+            color: #2563eb;
+
+            margin-right: 8px;
+
+        }
+
+
+        .panel-body {
+
+            padding: 25px 30px;
+
+        }
+
+
+        .admin-table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        .admin-table tr {
+
+            border-bottom: 1px solid #edf0f4;
+
+        }
+
+
+        .admin-table tr:last-child {
+
+            border-bottom: none;
+
+        }
+
+
+        .admin-table td {
+
+            padding: 17px 10px;
+
+        }
+
+
+        .admin-table td:first-child {
+
+            width: 35%;
+
+            color: #60758f;
+
+        }
+
+
+        .admin-table td:last-child {
+
+            color: #172b4d;
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            padding: 30px 0 10px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .statistics-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 768px) {
+
+            .topbar {
+
+                padding: 0 20px;
+
+            }
+
+
+            .menu-toggle {
+
+                margin-right: 15px;
+
+            }
+
+
+            .top-logo h2 {
+
+                font-size: 22px;
+
+            }
+
+
+            .main {
+
+                padding: 30px 20px;
+
+            }
+
+
+            .page-header h1 {
+
+                font-size: 30px;
+
+            }
+
+
+            .statistics-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .sidebar {
+
+                width: 320px;
+
+                left: -320px;
+
+            }
+
+
+            .profile-content {
+
+                padding: 0 20px 30px;
+
+            }
+
+
+            .info-row {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 5px;
+
+            }
+
+
+            .admin-table td {
+
+                display: block;
+
+                width: 100% !important;
+
+                padding: 8px 5px;
+
+            }
+
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .top-logo h2 {
+
+                font-size: 19px;
+
+            }
+
+
+            .top-logo-icon {
+
+                width: 34px;
+
+                height: 34px;
+
+            }
+
+
+            .profile-cover {
+
+                height: 110px;
+
+            }
+
+
+            .profile-avatar {
+
+                width: 105px;
+
+                height: 105px;
+
+                margin-top: -52px;
+
+            }
+
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<div class="sidebar">
 
-    <div class="logo">
+<!-- =====================================================
+     TOPBAR
+===================================================== -->
 
-        <div class="logo-icon">
+<header class="topbar">
+
+    <button
+        class="menu-toggle"
+        id="menuToggle">
+
+        <i class="fa-solid fa-bars"></i>
+
+    </button>
+
+
+    <div class="top-logo">
+
+        <div class="top-logo-icon">
 
             <i class="fa-solid fa-road"></i>
 
         </div>
 
-        <div>
 
-            <h2>TollCare</h2>
+        <h2>TollCare Helpdesk</h2>
 
-            <span>HELPDESK SYSTEM</span>
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     OVERLAY
+===================================================== -->
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay">
+</div>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="sidebar"
+    id="sidebar">
+
+
+    <div class="sidebar-header">
+
+        <div class="sidebar-logo">
+
+            <div class="sidebar-logo-icon">
+
+                <i class="fa-solid fa-road"></i>
+
+            </div>
+
+
+            <div>
+
+                <h2>TollCare</h2>
+
+                <span>HELPDESK SYSTEM</span>
+
+            </div>
 
         </div>
 
     </div>
 
-    <a href="/admin/profile" class="profile-card">
 
-        {% if admin.photo and admin.photo != "default.png" %}
+    <!-- PROFILE SIDEBAR -->
 
-        <img src="{{ url_for('static', filename='uploads/admin/' + admin.photo) }}">
+    <a
+        href="/admin/profile"
+        class="sidebar-profile">
+
+
+        {% if admin and admin.photo and admin.photo != "default.png" %}
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='uploads/admin/' + admin.photo
+            ) }}">
 
         {% else %}
 
-        <img src="{{ url_for('static', filename='uploads/admin/default.png') }}">
+        <img
+            src="{{ url_for(
+                'static',
+                filename='uploads/admin/default.png'
+            ) }}">
 
         {% endif %}
 
+
         <div>
 
-            <h4>{{ admin.fullname }}</h4>
+            <h4>
+                {{ admin.fullname }}
+            </h4>
 
-            <p>Administrator</p>
+            <p>
+                Administrator
+            </p>
 
         </div>
 
     </a>
 
-    <ul class="menu">
+
+    <!-- MENU -->
+
+    <ul class="sidebar-menu">
+
 
         <li>
 
@@ -82,6 +1100,7 @@
 
         </li>
 
+
         <li>
 
             <a href="/admin/laporan">
@@ -94,7 +1113,8 @@
 
         </li>
 
-        <li class="{% if request.path == '/admin/profile' %}active{% endif %}">
+
+        <li>
 
             <a href="/admin/statistik">
 
@@ -105,6 +1125,20 @@
             </a>
 
         </li>
+
+
+        <li>
+
+            <a href="/admin/absensi">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <span>Absensi</span>
+
+            </a>
+
+        </li>
+
 
         <li>
 
@@ -118,6 +1152,7 @@
 
         </li>
 
+
         <li>
 
             <a href="/admin/export/excel">
@@ -129,6 +1164,7 @@
             </a>
 
         </li>
+
 
         <li class="active">
 
@@ -142,6 +1178,7 @@
 
         </li>
 
+
         <li>
 
             <a href="/logout">
@@ -154,83 +1191,87 @@
 
         </li>
 
+
     </ul>
 
-</div>
+</aside>
 
-<div class="content">
 
-<header class="topbar">
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
-    <div>
+<main class="main">
 
-        <h1>Profil Admin</h1>
 
-        <p>Informasi akun administrator TollCare Helpdesk</p>
+    <!-- HEADER -->
 
-    </div>
+    <section class="page-header">
 
-    <div class="top-right">
+        <h1>
+            Profil Admin
+        </h1>
 
-        <a href="/admin"
-           class="btn btn-primary">
+        <p>
+            Informasi akun administrator TollCare Helpdesk
+        </p>
 
-            <i class="fa-solid fa-house"></i>
+    </section>
 
-            Dashboard
 
-        </a>
+    <!-- =================================================
+         PROFILE CARD
+    ================================================== -->
 
-        <a href="/logout"
-           class="btn btn-danger">
+    <section class="profile-card-main">
 
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            Logout
-
-        </a>
-
-    </div>
-
-</header>
-
-<div class="profile-grid">
-
-    <!-- CARD PROFIL -->
-
-    <div class="profile-box">
 
         <div class="profile-cover"></div>
 
+
         <div class="profile-content">
+
 
             {% if admin.photo and admin.photo != "default.png" %}
 
             <img
-                src="{{ url_for('static', filename='uploads/admin/' + admin.photo) }}"
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/admin/' + admin.photo
+                ) }}"
                 class="profile-avatar">
 
             {% else %}
 
             <img
-                src="{{ url_for('static', filename='uploads/admin/default.png') }}"
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/admin/default.png'
+                ) }}"
                 class="profile-avatar">
 
             {% endif %}
 
-            <h2>{{ admin.fullname }}</h2>
 
-            <p class="text-muted">
+            <h2>
+                {{ admin.fullname }}
+            </h2>
+
+
+            <p class="subtitle">
 
                 Administrator TollCare Helpdesk
 
             </p>
 
+
             <hr>
 
+
             <div class="profile-info">
-            
-                                <div class="info-row">
+
+
+                <div class="info-row">
 
                     <span>
 
@@ -240,6 +1281,7 @@
 
                     </span>
 
+
                     <strong>
 
                         {{ admin.username }}
@@ -247,6 +1289,7 @@
                     </strong>
 
                 </div>
+
 
                 <div class="info-row">
 
@@ -258,6 +1301,7 @@
 
                     </span>
 
+
                     <strong>
 
                         Administrator
@@ -265,6 +1309,7 @@
                     </strong>
 
                 </div>
+
 
                 <div class="info-row">
 
@@ -276,6 +1321,7 @@
 
                     </span>
 
+
                     <strong class="text-success">
 
                         Online
@@ -283,6 +1329,7 @@
                     </strong>
 
                 </div>
+
 
                 <div class="info-row">
 
@@ -294,6 +1341,7 @@
 
                     </span>
 
+
                     <strong id="todayDate">
 
                         Loading...
@@ -302,228 +1350,381 @@
 
                 </div>
 
+
             </div>
+
 
         </div>
 
-    </div>
+    </section>
 
-    <!-- STATISTIK -->
 
-    <div class="profile-statistics">
+    <!-- =================================================
+         STATISTIK
+    ================================================== -->
 
-        <div class="card-item">
+    <section class="statistics-grid">
 
-            <div class="card-icon blue">
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
 
                 <i class="fa-solid fa-file-lines"></i>
 
             </div>
 
-            <div class="card-info">
 
-                <h5>Total Laporan</h5>
+            <div class="stat-info">
 
-                <h2>{{ total }}</h2>
+                <h5>
+                    Total Laporan
+                </h5>
+
+                <h2>
+                    {{ total }}
+                </h2>
 
             </div>
 
         </div>
 
-        <div class="card-item">
 
-            <div class="card-icon red">
+        <div class="stat-card">
+
+            <div class="stat-icon red">
 
                 <i class="fa-solid fa-circle-exclamation"></i>
 
             </div>
 
-            <div class="card-info">
 
-                <h5>Open</h5>
+            <div class="stat-info">
 
-                <h2>{{ open_count }}</h2>
+                <h5>
+                    Open
+                </h5>
+
+                <h2>
+                    {{ open_count }}
+                </h2>
 
             </div>
 
         </div>
 
-        <div class="card-item">
 
-            <div class="card-icon orange">
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
 
                 <i class="fa-solid fa-spinner"></i>
 
             </div>
 
-            <div class="card-info">
 
-                <h5>Diproses</h5>
+            <div class="stat-info">
 
-                <h2>{{ process_count }}</h2>
+                <h5>
+                    Diproses
+                </h5>
+
+                <h2>
+                    {{ process_count }}
+                </h2>
 
             </div>
 
         </div>
 
-        <div class="card-item">
 
-            <div class="card-icon green">
+        <div class="stat-card">
+
+            <div class="stat-icon green">
 
                 <i class="fa-solid fa-circle-check"></i>
 
             </div>
 
-            <div class="card-info">
 
-                <h5>Selesai</h5>
+            <div class="stat-info">
 
-                <h2>{{ done_count }}</h2>
+                <h5>
+                    Selesai
+                </h5>
 
-            </div>
-
-        </div>
-
-        <div class="panel mt-4">
-
-            <div class="panel-header">
-
-                <h3>
-
-                    <i class="fa-solid fa-address-card"></i>
-
-                    Informasi Administrator
-
-                </h3>
-
-            </div>
-
-            <div class="panel-body">
-
-                <table class="table">
-
-                    <tr>
-
-                        <td>Nama Lengkap</td>
-
-                        <td><strong>{{ admin.fullname }}</strong></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>Username</td>
-
-                        <td><strong>{{ admin.username }}</strong></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>Email</td>
-
-                        <td><strong>{{ admin.email or "-" }}</strong></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>No. HP</td>
-
-                        <td><strong>{{ admin.phone or "-" }}</strong></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>Status</td>
-
-                        <td>
-
-                            <span class="badge bg-success">
-
-                                Aktif
-
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                </table>
-
-                <div class="mt-3">
-
-                    <a
-                        href="/admin/profile/edit"
-                        class="btn btn-primary">
-
-                        <i class="fa-solid fa-pen"></i>
-
-                        Edit Profil
-
-                    </a>
-
-                </div>
+                <h2>
+                    {{ done_count }}
+                </h2>
 
             </div>
 
         </div>
 
-    </div>
 
-</div>
+    </section>
 
-<footer class="footer">
 
-    <div>
+    <!-- =================================================
+         INFORMASI ADMINISTRATOR
+    ================================================== -->
 
-        © 2026 TollCare Helpdesk
+    <section class="admin-panel">
 
-    </div>
 
-    <div>
+        <div class="panel-header">
 
-        Administrator Panel
+            <h3>
 
-    </div>
+                <i class="fa-solid fa-address-card"></i>
 
-</footer>
+                Informasi Administrator
 
-</div>
+            </h3>
+
+        </div>
+
+
+        <div class="panel-body">
+
+
+            <table class="admin-table">
+
+
+                <tr>
+
+                    <td>
+                        Nama Lengkap
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ admin.fullname }}
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Username
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ admin.username }}
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Email
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ admin.email or "-" }}
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        No. HP
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ admin.phone or "-" }}
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Status
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-success">
+
+                            Aktif
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+
+            </table>
+
+
+            <div class="mt-4">
+
+                <a
+                    href="/admin/profile/edit"
+                    class="btn btn-primary">
+
+                    <i class="fa-solid fa-pen"></i>
+
+                    Edit Profil
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="footer">
+
+        <div>
+
+            © 2026 TollCare Helpdesk
+
+        </div>
+
+
+        <div>
+
+            Administrator Panel
+
+        </div>
+
+    </footer>
+
+
+</main>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
 
 <script>
 
-function updateClock(){
 
-    const now = new Date();
+    /* =====================================================
+       SIDEBAR
+    ===================================================== */
 
-    const option = {
+    const menuToggle =
+        document.getElementById("menuToggle");
 
-        weekday: "long",
 
-        year: "numeric",
+    const sidebar =
+        document.getElementById("sidebar");
 
-        month: "long",
 
-        day: "numeric",
+    const sidebarOverlay =
+        document.getElementById(
+            "sidebarOverlay"
+        );
 
-        hour: "2-digit",
 
-        minute: "2-digit"
+    function openSidebar() {
 
-    };
+        sidebar.classList.add("show");
 
-    document.getElementById("todayDate").innerHTML =
-        now.toLocaleDateString("id-ID", option);
+        sidebarOverlay.classList.add("show");
 
-}
+    }
 
-updateClock();
 
-setInterval(updateClock, 60000);
+    function closeSidebar() {
+
+        sidebar.classList.remove("show");
+
+        sidebarOverlay.classList.remove("show");
+
+    }
+
+
+    menuToggle.addEventListener(
+        "click",
+        function () {
+
+            if (
+                sidebar.classList.contains("show")
+            ) {
+
+                closeSidebar();
+
+            } else {
+
+                openSidebar();
+
+            }
+
+        }
+    );
+
+
+    sidebarOverlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+
+    /* =====================================================
+       TANGGAL
+    ===================================================== */
+
+    const todayDate =
+        document.getElementById(
+            "todayDate"
+        );
+
+
+    if (todayDate) {
+
+        const now =
+            new Date();
+
+
+        todayDate.innerText =
+            now.toLocaleDateString(
+                "id-ID",
+                {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+
+    }
 
 </script>
+
 
 </body>
 
