@@ -20,27 +20,253 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet">
 
-    <!-- CSS -->
+    <!-- CSS utama -->
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}">
 
+    <style>
+
+        /* =========================================
+           HALAMAN UTAMA
+        ========================================= */
+
+        .home-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .home-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .home-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #0d6efd;
+            margin-bottom: 15px;
+        }
+
+        .home-header p {
+            font-size: 18px;
+            color: #64748b;
+            margin: 0;
+        }
+
+
+        /* =========================================
+           3 CARD UTAMA
+        ========================================= */
+
+        .home-menu {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            align-items: stretch;
+        }
+
+
+        /* =========================================
+           CARD
+        ========================================= */
+
+        .home-menu-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 35px 25px;
+
+            min-height: 350px;
+
+            display: flex;
+            flex-direction: column;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.08);
+
+            transition: all 0.3s ease;
+        }
+
+
+        .home-menu-card:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 18px 35px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* =========================================
+           ICON
+        ========================================= */
+
+        .home-menu-icon {
+            height: 80px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 20px;
+        }
+
+        .home-menu-icon i {
+            font-size: 55px;
+        }
+
+
+        /* =========================================
+           JUDUL
+        ========================================= */
+
+        .home-menu-card h4 {
+            font-size: 23px;
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+            color: #1e293b;
+        }
+
+
+        /* =========================================
+           DESKRIPSI
+        ========================================= */
+
+        .home-menu-description {
+            min-height: 55px;
+
+            color: #64748b;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================
+           AREA BUTTON
+        ========================================= */
+
+        .home-menu-button {
+            margin-top: auto;
+        }
+
+
+        .home-menu-button a {
+            min-width: 160px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           INFO
+        ========================================= */
+
+        .home-info {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .home-footer {
+            margin-top: 45px;
+
+            padding-top: 25px;
+
+            border-top: 1px solid #dee2e6;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           TABLET
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .home-menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        /* =========================================
+           HP
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            .home-wrapper {
+                margin: 30px auto;
+            }
+
+
+            .home-header h1 {
+                font-size: 32px;
+            }
+
+
+            .home-header p {
+                font-size: 16px;
+            }
+
+
+            .home-menu {
+                grid-template-columns: 1fr;
+            }
+
+
+            .home-menu-card {
+                min-height: 320px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
-<body class="bg-light">
+<body>
 
 
-<div class="container mt-5 mb-5">
+<div class="home-wrapper">
 
 
-    <!-- ================================= -->
-    <!-- HEADER -->
-    <!-- ================================= -->
+    <!-- =====================================
+         HEADER
+    ====================================== -->
 
-    <div class="text-center">
+    <div class="home-header">
 
-        <h1 class="display-4 fw-bold text-primary">
+        <h1>
 
             <i class="fa-solid fa-road"></i>
 
@@ -49,7 +275,7 @@
         </h1>
 
 
-        <p class="lead mt-3">
+        <p>
 
             Sistem Pengaduan dan Monitoring
             Kerusakan Jalan Tol
@@ -59,185 +285,159 @@
     </div>
 
 
-    <!-- ================================= -->
-    <!-- MENU UTAMA -->
-    <!-- ================================= -->
 
-    <div class="row mt-5 home-cards">
+    <!-- =====================================
+         MENU
+    ====================================== -->
 
-
-        <!-- =============================== -->
-        <!-- BUAT LAPORAN -->
-        <!-- =============================== -->
-
-        <div class="col-md-4 mb-4 d-flex">
-
-            <div class="card shadow h-100 w-100">
-
-                <div
-                    class="card-body text-center d-flex flex-column">
+    <div class="home-menu">
 
 
-                    <div>
+        <!-- =================================
+             BUAT LAPORAN
+        ================================== -->
 
-                        <i
-                            class="fa-solid fa-triangle-exclamation fa-4x text-danger mb-3">
-                        </i>
-
-
-                        <h4 class="mb-3">
-
-                            Buat Laporan
-
-                        </h4>
+        <div class="home-menu-card">
 
 
-                        <p>
+            <div class="home-menu-icon">
 
-                            Laporkan kerusakan jalan tol
-                            disertai foto lokasi.
-
-                        </p>
-
-                    </div>
-
-
-                    <div class="mt-auto pt-3">
-
-                        <a
-                            href="/report"
-                            class="btn btn-primary">
-
-                            <i class="fa-solid fa-file-circle-plus"></i>
-
-                            Buat Laporan
-
-                        </a>
-
-                    </div>
-
-
-                </div>
+                <i
+                    class="fa-solid fa-triangle-exclamation text-danger">
+                </i>
 
             </div>
+
+
+            <h4>
+
+                Buat Laporan
+
+            </h4>
+
+
+            <div class="home-menu-description">
+
+                Laporkan kerusakan jalan tol
+                disertai foto lokasi.
+
+            </div>
+
+
+            <div class="home-menu-button">
+
+                <a
+                    href="/report"
+                    class="btn btn-primary">
+
+                    <i class="fa-solid fa-file-circle-plus"></i>
+
+                    Buat Laporan
+
+                </a>
+
+            </div>
+
 
         </div>
 
 
 
-        <!-- =============================== -->
-        <!-- TRACKING -->
-        <!-- =============================== -->
+        <!-- =================================
+             TRACKING
+        ================================== -->
 
-        <div class="col-md-4 mb-4 d-flex">
-
-            <div class="card shadow h-100 w-100">
-
-                <div
-                    class="card-body text-center d-flex flex-column">
+        <div class="home-menu-card">
 
 
-                    <div>
+            <div class="home-menu-icon">
 
-                        <i
-                            class="fa-solid fa-magnifying-glass fa-4x text-success mb-3">
-                        </i>
-
-
-                        <h4 class="mb-3">
-
-                            Tracking Tiket
-
-                        </h4>
-
-
-                        <p>
-
-                            Lihat status laporan
-                            yang sudah dikirim.
-
-                        </p>
-
-                    </div>
-
-
-                    <div class="mt-auto pt-3">
-
-                        <a
-                            href="/tracking"
-                            class="btn btn-success">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                            Tracking
-
-                        </a>
-
-                    </div>
-
-
-                </div>
+                <i
+                    class="fa-solid fa-magnifying-glass text-success">
+                </i>
 
             </div>
+
+
+            <h4>
+
+                Tracking Tiket
+
+            </h4>
+
+
+            <div class="home-menu-description">
+
+                Lihat status laporan
+                yang sudah dikirim.
+
+            </div>
+
+
+            <div class="home-menu-button">
+
+                <a
+                    href="/tracking"
+                    class="btn btn-success">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    Tracking
+
+                </a>
+
+            </div>
+
 
         </div>
 
 
 
-        <!-- =============================== -->
-        <!-- ADMIN -->
-        <!-- =============================== -->
+        <!-- =================================
+             ADMIN
+        ================================== -->
 
-        <div class="col-md-4 mb-4 d-flex">
-
-            <div class="card shadow h-100 w-100">
-
-                <div
-                    class="card-body text-center d-flex flex-column">
+        <div class="home-menu-card">
 
 
-                    <div>
+            <div class="home-menu-icon">
 
-                        <i
-                            class="fa-solid fa-user-shield fa-4x text-dark mb-3">
-                        </i>
-
-
-                        <h4 class="mb-3">
-
-                            Admin
-
-                        </h4>
-
-
-                        <p>
-
-                            Login untuk mengelola
-                            seluruh laporan masyarakat.
-
-                        </p>
-
-                    </div>
-
-
-                    <div class="mt-auto pt-3">
-
-                        <a
-                            href="/login"
-                            class="btn btn-dark">
-
-                            <i class="fa-solid fa-right-to-bracket"></i>
-
-                            Login Admin
-
-                        </a>
-
-                    </div>
-
-
-                </div>
+                <i
+                    class="fa-solid fa-user-shield text-dark">
+                </i>
 
             </div>
+
+
+            <h4>
+
+                Admin
+
+            </h4>
+
+
+            <div class="home-menu-description">
+
+                Login untuk mengelola
+                seluruh laporan masyarakat.
+
+            </div>
+
+
+            <div class="home-menu-button">
+
+                <a
+                    href="/login"
+                    class="btn btn-dark">
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    Login Admin
+
+                </a>
+
+            </div>
+
 
         </div>
 
@@ -246,11 +446,11 @@
 
 
 
-    <!-- ================================= -->
-    <!-- INFORMASI -->
-    <!-- ================================= -->
+    <!-- =====================================
+         INFO
+    ====================================== -->
 
-    <div class="text-center mt-4">
+    <div class="home-info">
 
         <div class="alert alert-info">
 
@@ -264,33 +464,29 @@
 
 
 
-    <!-- ================================= -->
-    <!-- FOOTER -->
-    <!-- ================================= -->
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
 
-    <hr class="my-5">
+    <div class="home-footer">
 
-
-    <div class="text-center text-muted">
-
-        <p class="mb-1">
+        <div>
 
             © 2026 TollCare Helpdesk
 
-        </p>
+        </div>
 
-        <small>
+        <div>
 
             Sistem Pengaduan dan Monitoring
             Kerusakan Jalan Tol
 
-        </small>
+        </div>
 
     </div>
 
 
 </div>
-
 
 
 <!-- Bootstrap JS -->
