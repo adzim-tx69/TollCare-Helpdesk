@@ -11,9 +11,20 @@ class Config:
         "supersecretkey"
     )
 
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "MYSQL_PUBLIC_URL"
-    )
+    # ==========================
+    # DATABASE
+    # ==========================
+
+    database_url = os.getenv("MYSQL_PUBLIC_URL")
+
+    if database_url and database_url.startswith("mysql://"):
+        database_url = database_url.replace(
+            "mysql://",
+            "mysql+pymysql://",
+            1
+        )
+
+    SQLALCHEMY_DATABASE_URI = database_url
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -31,10 +42,7 @@ class Config:
 
     PERMANENT_SESSION_LIFETIME = 7200
 
-    # ==========================
-    # UPLOAD
-    # ==========================
-
+    # Upload
     UPLOAD_FOLDER = "uploads"
 
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
