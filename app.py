@@ -603,11 +603,24 @@ def report():
 def uploaded_file(filename):
 
     return send_from_directory(
-
         app.config["UPLOAD_FOLDER"],
-
         filename
+    )
 
+
+# =====================================================
+# FOTO PERBAIKAN
+# =====================================================
+
+@app.route("/uploads/repair/<filename>")
+def repair_file(filename):
+
+    return send_from_directory(
+        os.path.join(
+            app.config["UPLOAD_FOLDER"],
+            "repair"
+        ),
+        filename
     )
 # =====================================================
 # DASHBOARD ADMIN
@@ -774,11 +787,11 @@ def admin_laporan():
     return render_template(
 
         "admin/laporan.html",
+      tickets=tickets,
 
         admin=admin,
 
-        tickets=tickets,
-
+  
         page=page
 
     )
@@ -1130,8 +1143,8 @@ def update_profile():
 
     )
 
-# =====================================================
-# FOTO ADMIN
+#==================================================
+# FOTO  ===ADMIN
 # =====================================================
 @app.route("/uploads/admin/<filename>")
 def admin_photo(filename):
