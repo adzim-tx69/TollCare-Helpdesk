@@ -46,6 +46,7 @@ from config import Config
 
 from models.ticket import Ticket
 from models.admin import Admin
+from models.attendance import Attendance
 
 # =====================================================
 # SECURITY
@@ -803,6 +804,366 @@ def admin_statistik():
 
         **stats
 
+    )
+# =====================================================
+# ABSENSI ADMIN
+# =====================================================
+
+@app.route("/admin/absensi")
+def admin_absensi():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # DATA ADMIN
+    # ==========================
+
+    admin = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+
+    if not admin:
+
+        session.clear()
+
+        flash(
+            "Data admin tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # TANGGAL HARI INI
+    # ==========================
+
+    today = waktu_wib().date()
+
+
+    # ==========================
+    # ABSENSI HARI INI
+    # ==========================
+
+    attendance = Attendance.query.filter_by(
+        admin_id=admin.id,
+        attendance_date=today
+    ).first()
+
+
+    # ==========================
+    # RIWAYAT ABSENSI
+    # ==========================
+
+    attendances = (
+        Attendance.query
+        .filter_by(admin_id=admin.id)
+        .order_by(
+            Attendance.attendance_date.desc()
+        )
+        .limit(30)
+        .all()
+    )
+
+
+    # ==========================
+    # RENDER
+    # ==========================
+
+    return render_template(
+
+        "admin/absensi.html",
+
+        admin=admin,
+
+        attendance=attendance,
+
+        attendances=attendances,
+
+        now=waktu_wib()
+
+    )
+
+
+# =====================================================
+# CHECK IN
+# =====================================================
+
+@app.route(
+    "/admin/absensi/check-in",
+    methods=["POST"]
+)
+def admin_check_in():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # DATA ADMIN
+    # ==========================
+
+    admin = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+
+    if not admin:
+
+        session.clear()
+
+        flash(
+            "Data admin tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # WAKTU SEKARANG WIB
+    # ==========================
+
+    current_time = waktu_wib()
+
+    today = current_time.date()
+
+
+    # ==========================
+    # CEK ABSENSI HARI INI
+    # ==========================
+
+    attendance = Attendance.query.filter_by(
+        admin_id=admin.id,
+        attendance_date=today
+    ).first()
+
+
+    # ==========================
+    # SUDAH CHECK IN
+    # ==========================
+
+    if attendance and attendance.check_in:
+
+        flash(
+            "Anda sudah melakukan Check In hari ini.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("admin_absensi")
+        )
+
+
+    # ==========================
+    # BUAT DATA ABSENSI
+    # ==========================
+
+    if not attendance:
+
+        attendance = Attendance(
+
+            admin_id=admin.id,
+
+            attendance_date=today,
+
+            check_in=current_time,
+
+            status="Hadir"
+
+        )
+
+        db.session.add(attendance)
+
+    else:
+
+        attendance.check_in = current_time
+
+        attendance.status = "Hadir"
+
+
+    # ==========================
+    # SIMPAN
+    # ==========================
+
+    try:
+
+        db.session.commit()
+
+        flash(
+            "Check In berhasil dicatat.",
+            "success"
+        )
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print(
+            "CHECK IN ERROR:",
+            e
+        )
+
+        flash(
+            "Gagal menyimpan Check In.",
+            "danger"
+        )
+
+
+    return redirect(
+        url_for("admin_absensi")
+    )
+
+
+# =====================================================
+# CHECK OUT
+# =====================================================
+
+@app.route(
+    "/admin/absensi/check-out",
+    methods=["POST"]
+)
+def admin_check_out():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # DATA ADMIN
+    # ==========================
+
+    admin = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+
+    if not admin:
+
+        session.clear()
+
+        flash(
+            "Data admin tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+
+    # ==========================
+    # WAKTU SEKARANG
+    # ==========================
+
+    current_time = waktu_wib()
+
+    today = current_time.date()
+
+
+    # ==========================
+    # CARI ABSENSI
+    # ==========================
+
+    attendance = Attendance.query.filter_by(
+        admin_id=admin.id,
+        attendance_date=today
+    ).first()
+
+
+    # ==========================
+    # BELUM CHECK IN
+    # ==========================
+
+    if not attendance or not attendance.check_in:
+
+        flash(
+            "Anda harus Check In terlebih dahulu.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("admin_absensi")
+        )
+
+
+    # ==========================
+    # SUDAH CHECK OUT
+    # ==========================
+
+    if attendance.check_out:
+
+        flash(
+            "Anda sudah melakukan Check Out hari ini.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("admin_absensi")
+        )
+
+
+    # ==========================
+    # SIMPAN CHECK OUT
+    # ==========================
+
+    attendance.check_out = current_time
+
+
+    try:
+
+        db.session.commit()
+
+        flash(
+            "Check Out berhasil dicatat.",
+            "success"
+        )
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print(
+            "CHECK OUT ERROR:",
+            e
+        )
+
+        flash(
+            "Gagal menyimpan Check Out.",
+            "danger"
+        )
+
+
+    return redirect(
+        url_for("admin_absensi")
     )
 
 # =====================================================

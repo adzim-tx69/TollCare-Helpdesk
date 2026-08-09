@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Absensi Admin - TollCare</title>
+
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet">
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6f9;
+
+            color: #1e293b;
+
+        }
+
+
+        /* =========================================
+           TOPBAR
+        ========================================= */
+
+        .topbar {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 72px;
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid #e2e8f0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 25px;
+
+            z-index: 1000;
+
+        }
+
+
+        .topbar-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 18px;
+
+        }
+
+
+        .menu-button {
+
+            width: 44px;
+            height: 44px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 10px;
+
+            color: #475569;
+
+            font-size: 22px;
+
+            cursor: pointer;
+
+            transition: .25s;
+
+        }
+
+
+        .menu-button:hover {
+
+            background: #f1f3f5;
+
+            color: #2563eb;
+
+        }
+
+
+        .top-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            color: #2563eb;
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+        }
+
+
+        .profile-button {
+
+            width: 44px;
+            height: 44px;
+
+            border-radius: 50%;
+
+            background: #f1f5f9;
+
+            color: #475569;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-decoration: none;
+
+            font-size: 19px;
+
+        }
+
+
+        .profile-button:hover {
+
+            background: #e2e8f0;
+
+            color: #2563eb;
+
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 0;
+
+            left: -290px;
+
+            width: 290px;
+
+            height: 100vh;
+
+            background: #343a40;
+
+            color: white;
+
+            z-index: 2000;
+
+            transition: left .3s ease;
+
+            overflow-y: auto;
+
+        }
+
+
+        .sidebar.active {
+
+            left: 0;
+
+        }
+
+
+        .sidebar-header {
+
+            height: 125px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 20px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.12);
+
+        }
+
+
+        .logo-icon {
+
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 23px;
+
+        }
+
+
+        .sidebar-brand h2 {
+
+            margin: 0;
+
+            font-size: 22px;
+
+        }
+
+
+        .sidebar-brand span {
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            color: #cbd5e1;
+
+        }
+
+
+        /* =========================================
+           PROFILE
+        ========================================= */
+
+        .sidebar-profile {
+
+            padding: 22px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.12);
+
+        }
+
+
+        .sidebar-profile img {
+
+            width: 48px;
+            height: 48px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+        }
+
+
+        .sidebar-profile h4 {
+
+            margin: 0;
+
+            font-size: 16px;
+
+        }
+
+
+        .sidebar-profile p {
+
+            margin: 3px 0 0;
+
+            font-size: 13px;
+
+            color: #cbd5e1;
+
+        }
+
+
+        /* =========================================
+           MENU
+        ========================================= */
+
+        .sidebar-menu {
+
+            padding: 18px 12px;
+
+        }
+
+
+        .sidebar-menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 13px 15px;
+
+            margin-bottom: 5px;
+
+            border-radius: 9px;
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            transition: .25s;
+
+        }
+
+
+        .sidebar-menu a:hover {
+
+            background: #495057;
+
+            color: white;
+
+        }
+
+
+        .sidebar-menu a.active {
+
+            background: #2563eb;
+
+            color: white;
+
+        }
+
+
+        .sidebar-menu a i {
+
+            width: 22px;
+
+            text-align: center;
+
+        }
+
+
+        .logout-menu {
+
+            margin-top: 20px;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.12);
+
+        }
+
+
+        .logout-menu a:hover {
+
+            background: #dc3545;
+
+        }
+
+
+        /* =========================================
+           OVERLAY
+        ========================================= */
+
+        .overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,.35);
+
+            z-index: 1500;
+
+            display: none;
+
+        }
+
+
+        .overlay.active {
+
+            display: block;
+
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .main-content {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding:
+                110px 30px 40px;
+
+        }
+
+
+        .page-header {
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .page-header h1 {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .page-header p {
+
+            color: #64748b;
+
+            margin: 0;
+
+        }
+
+
+        /* =========================================
+           ABSENSI HARI INI
+        ========================================= */
+
+        .attendance-card {
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,.06);
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .attendance-title {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .attendance-title h4 {
+
+            margin: 0;
+
+            font-weight: 700;
+
+        }
+
+
+        .date-label {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status-box {
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .status-icon {
+
+            width: 70px;
+            height: 70px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            background: #dbeafe;
+
+            color: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 30px;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .status-box h3 {
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            margin-bottom: 5px;
+
+        }
+
+
+        .status-box p {
+
+            color: #64748b;
+
+            margin: 0;
+
+        }
+
+
+        /* =========================================
+           TIME
+        ========================================= */
+
+        .time-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        .time-box {
+
+            padding: 20px;
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+        }
+
+
+        .time-box i {
+
+            font-size: 25px;
+
+            color: #2563eb;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .time-box h6 {
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .time-box strong {
+
+            font-size: 24px;
+
+        }
+
+
+        /* =========================================
+           BUTTON
+        ========================================= */
+
+        .attendance-buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+        }
+
+
+        .attendance-buttons .btn {
+
+            min-width: 160px;
+
+            padding: 12px 20px;
+
+            border-radius: 10px;
+
+            font-weight: 600;
+
+        }
+
+
+        /* =========================================
+           RIWAYAT
+        ========================================= */
+
+        .history-card {
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,.06);
+
+        }
+
+
+        .history-card h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+        }
+
+
+        table th {
+
+            background: #f8fafc;
+
+            color: #475569;
+
+            padding: 14px;
+
+            white-space: nowrap;
+
+        }
+
+
+        table td {
+
+            padding: 14px;
+
+            vertical-align: middle;
+
+        }
+
+
+        .badge-hadir {
+
+            background: #dcfce7;
+
+            color: #198754;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        .badge-belum {
+
+            background: #fee2e2;
+
+            color: #dc3545;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            padding-top: 35px;
+
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .main-content {
+
+                padding:
+                    95px 15px 30px;
+
+            }
+
+
+            .top-logo span {
+
+                display: none;
+
+            }
+
+
+            .time-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .attendance-buttons {
+
+                flex-direction: column;
+
+            }
+
+
+            .attendance-buttons .btn {
+
+                width: 100%;
+
+            }
+
+
+            .attendance-card,
+            .history-card {
+
+                padding: 20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         OVERLAY
+    ========================================== -->
+
+    <div
+        class="overlay"
+        id="overlay">
+    </div>
+
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar">
+
+
+        <div class="sidebar-header">
+
+            <div class="logo-icon">
+
+                <i class="fa-solid fa-road"></i>
+
+            </div>
+
+
+            <div class="sidebar-brand">
+
+                <h2>TollCare</h2>
+
+                <span>HELPDESK SYSTEM</span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PROFILE -->
+
+        <div class="sidebar-profile">
+
+
+            {% if admin.photo and admin.photo != "default.png" %}
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/admin/' + admin.photo
+                    ) }}"
+                    alt="Admin">
+
+            {% else %}
+
+                <img
+                    src="{{ url_for(
+                        'static',
+                        filename='uploads/admin/default.png'
+                    ) }}"
+                    alt="Admin">
+
+            {% endif %}
+
+
+            <div>
+
+                <h4>
+                    {{ admin.fullname }}
+                </h4>
+
+                <p>
+                    Administrator
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MENU -->
+
+        <nav class="sidebar-menu">
+
+
+            <a href="{{ url_for('admin') }}">
+
+                <i class="fa-solid fa-house"></i>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="{{ url_for('admin_laporan') }}">
+
+                <i class="fa-solid fa-clipboard-list"></i>
+
+                Data Laporan
+
+            </a>
+
+
+            <a href="/admin/statistik">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+                Statistik
+
+            </a>
+
+
+            <!-- ABSENSI -->
+
+            <a
+                href="/admin/absensi"
+                class="active">
+
+                <i class="fa-solid fa-clock"></i>
+
+                Absensi
+
+            </a>
+
+
+            <a href="/admin/export/pdf">
+
+                <i class="fa-solid fa-file-pdf"></i>
+
+                Export PDF
+
+            </a>
+
+
+            <a href="/admin/export/excel">
+
+                <i class="fa-solid fa-file-excel"></i>
+
+                Export Excel
+
+            </a>
+
+
+            <a href="/admin/profile">
+
+                <i class="fa-solid fa-user"></i>
+
+                Profil Admin
+
+            </a>
+
+
+            <div class="logout-menu">
+
+                <a href="/logout">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Logout
+
+                </a>
+
+            </div>
+
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =========================================
+         TOPBAR
+    ========================================== -->
+
+    <header class="topbar">
+
+
+        <div class="topbar-left">
+
+
+            <button
+                class="menu-button"
+                id="menuButton">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <div class="top-logo">
+
+                <i class="fa-solid fa-road"></i>
+
+                <span>
+                    TollCare Helpdesk
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="/admin/profile"
+            class="profile-button">
+
+            <i class="fa-solid fa-user"></i>
+
+        </a>
+
+    </header>
+
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+            <h1>
+                Absensi
+            </h1>
+
+            <p>
+                Kelola kehadiran Admin TollCare
+            </p>
+
+        </div>
+
+
+
+        <!-- =====================================
+             ABSENSI HARI INI
+        ====================================== -->
+
+        <div class="attendance-card">
+
+
+            <div class="attendance-title">
+
+                <div>
+
+                    <h4>
+                        Absensi Hari Ini
+                    </h4>
+
+                </div>
+
+
+                <div class="date-label">
+
+                    <i class="fa-regular fa-calendar"></i>
+
+                    {{ now.strftime("%d/%m/%Y") }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="status-box">
+
+
+                <div class="status-icon">
+
+                    <i class="fa-solid fa-user-check"></i>
+
+                </div>
+
+
+                <h3>
+                    {% if attendance %}
+                        {{ attendance.status }}
+                    {% else %}
+                        Belum Absen
+                    {% endif %}
+                </h3>
+
+
+                <p>
+                    Status kehadiran hari ini
+                </p>
+
+            </div>
+
+
+
+            <!-- JAM -->
+
+            <div class="time-grid">
+
+
+                <div class="time-box">
+
+                    <i
+                        class="fa-solid fa-right-to-bracket">
+                    </i>
+
+                    <h6>
+                        Check In
+                    </h6>
+
+
+                    <strong>
+
+                        {% if attendance and attendance.check_in %}
+
+                            {{ attendance.check_in.strftime("%H:%M") }}
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+
+                <div class="time-box">
+
+                    <i
+                        class="fa-solid fa-right-from-bracket">
+                    </i>
+
+                    <h6>
+                        Check Out
+                    </h6>
+
+
+                    <strong>
+
+                        {% if attendance and attendance.check_out %}
+
+                            {{ attendance.check_out.strftime("%H:%M") }}
+
+                        {% else %}
+
+                            --
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <div class="attendance-buttons">
+
+
+                {% if not attendance or not attendance.check_in %}
+
+                    <form
+                        method="POST"
+                        action="/admin/absensi/check-in">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary">
+
+                            <i
+                                class="fa-solid
+                                fa-right-to-bracket">
+                            </i>
+
+                            Check In
+
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+
+
+                {% if attendance and attendance.check_in and not attendance.check_out %}
+
+                    <form
+                        method="POST"
+                        action="/admin/absensi/check-out">
+
+                        <button
+                            type="submit"
+                            class="btn btn-success">
+
+                            <i
+                                class="fa-solid
+                                fa-right-from-bracket">
+                            </i>
+
+                            Check Out
+
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================
+             RIWAYAT ABSENSI
+        ====================================== -->
+
+        <div class="history-card">
+
+
+            <h4>
+                Riwayat Absensi
+            </h4>
+
+
+            <div class="table-responsive">
+
+
+                <table
+                    class="table align-middle">
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                No
+                            </th>
+
+                            <th>
+                                Tanggal
+                            </th>
+
+                            <th>
+                                Check In
+                            </th>
+
+                            <th>
+                                Check Out
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for item in attendances %}
+
+
+                        <tr>
+
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+
+                            <td>
+
+                                {{ item.attendance_date.strftime("%d/%m/%Y") }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if item.check_in %}
+
+                                    {{ item.check_in.strftime("%H:%M") }}
+
+                                {% else %}
+
+                                    --
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if item.check_out %}
+
+                                    {{ item.check_out.strftime("%H:%M") }}
+
+                                {% else %}
+
+                                    --
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if item.status == "Hadir" %}
+
+                                    <span
+                                        class="badge-hadir">
+
+                                        Hadir
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span
+                                        class="badge-belum">
+
+                                        {{ item.status }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% else %}
+
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="text-center text-muted py-5">
+
+                                <i
+                                    class="fa-solid
+                                    fa-calendar-xmark
+                                    fa-2x
+                                    mb-3">
+                                </i>
+
+                                <br>
+
+                                Belum ada riwayat absensi.
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            <div>
+                © 2026 TollCare Helpdesk
+            </div>
+
+            <div>
+                Sistem Helpdesk Terpadu
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        const sidebar =
+            document.getElementById("sidebar");
+
+        const menuButton =
+            document.getElementById("menuButton");
+
+        const overlay =
+            document.getElementById("overlay");
+
+
+        menuButton.addEventListener(
+            "click",
+            function () {
+
+                sidebar.classList.toggle("active");
+
+                overlay.classList.toggle("active");
+
+            }
+        );
+
+
+        overlay.addEventListener(
+            "click",
+            function () {
+
+                sidebar.classList.remove("active");
+
+                overlay.classList.remove("active");
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>
