@@ -145,12 +145,12 @@ def index():
         "masyarakat/index.html"
     )
 
-
 # =====================================================
 # LOGIN ADMIN
 # =====================================================
-@app.route("/login", methods=["GET", "POST"])
-def login():
+
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
 
     # Jika sudah login, langsung ke dashboard
     if "admin" in session:
@@ -159,21 +159,17 @@ def login():
             url_for("admin")
         )
 
-
     if request.method == "POST":
-
 
         username = request.form.get(
             "username",
             ""
         ).strip()
 
-
         password = request.form.get(
             "password",
             ""
         )
-
 
         # ==========================
         # VALIDASI FORM KOSONG
@@ -187,22 +183,16 @@ def login():
             )
 
             return redirect(
-                url_for("login")
+                url_for("admin_login")
             )
-
-
 
         # ==========================
         # CARI ADMIN
         # ==========================
 
         admin = Admin.query.filter_by(
-
             username=username
-
         ).first()
-
-
 
         # ==========================
         # CEK ADMIN
@@ -210,20 +200,14 @@ def login():
 
         print("ADMIN DITEMUKAN:", admin)
 
-
-
         # ==========================
         # VALIDASI PASSWORD
         # ==========================
 
         if admin and check_password_hash(
-
             admin.password,
-
             password
-
         ):
-
 
             # ==========================
             # BUAT SESSION
@@ -233,49 +217,31 @@ def login():
 
             session["admin"] = admin.username
 
-
             print(
                 "LOGIN SESSION:",
                 session
             )
 
-
             flash(
-
                 f"Selamat datang, {admin.fullname}.",
-
                 "success"
-
             )
-
 
             return redirect(
-
                 url_for("admin")
-
             )
-
-
 
         print(
             "LOGIN GAGAL"
         )
 
-
         flash(
-
             "Username atau Password salah.",
-
             "danger"
-
         )
 
-
-
     return render_template(
-
         "admin/login.html"
-
     )
 
 # =====================================================
@@ -292,7 +258,7 @@ def logout():
     )
 
     return redirect(
-        url_for("login")
+        url_for("admin_login")
     )
 
 # =====================================================
@@ -643,7 +609,7 @@ def admin():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -672,7 +638,7 @@ def admin():
         )
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -751,7 +717,7 @@ def admin_laporan():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
     admin = Admin.query.filter_by(
@@ -805,7 +771,7 @@ def admin_statistik():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+         url_for("admin_login")
         )
 
     admin = Admin.query.filter_by(
@@ -835,7 +801,7 @@ def admin_profile():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -870,7 +836,7 @@ def edit_profile():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -889,7 +855,7 @@ def edit_profile():
         )
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -920,7 +886,7 @@ def update_profile():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -944,7 +910,7 @@ def update_profile():
         )
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -1172,7 +1138,7 @@ def export_pdf():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -1332,7 +1298,7 @@ def export_excel():
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -1536,7 +1502,7 @@ def ticket_detail(id):
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
@@ -1573,7 +1539,7 @@ def complete_ticket(id):
     if "admin" not in session:
 
         return redirect(
-            url_for("login")
+            url_for("admin_login")
         )
 
 
