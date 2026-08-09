@@ -11,12 +11,11 @@ class Config:
         "supersecretkey"
     )
 
-
-    SQLALCHEMY_DATABASE_URI = os.getenv("MYSQL_PUBLIC_URL")
-
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "MYSQL_PUBLIC_URL"
+    )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
 
     # ==========================
     # SESSION CONFIG
@@ -30,11 +29,12 @@ class Config:
 
     SESSION_COOKIE_SAMESITE = "Lax"
 
-
     PERMANENT_SESSION_LIFETIME = 7200
 
+    # ==========================
+    # UPLOAD
+    # ==========================
 
-    # Upload
     UPLOAD_FOLDER = "uploads"
 
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
