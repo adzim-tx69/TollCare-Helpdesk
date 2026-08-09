@@ -51,8 +51,10 @@ from models.attendance import Attendance
 # =====================================================
 # SECURITY
 # =====================================================
-
-from werkzeug.security import check_password_hash
+from werkzeug.security import (
+    check_password_hash,
+    generate_password_hash
+)
 
 # =====================================================
 # PDF
@@ -163,18 +165,18 @@ def index():
     )
 
 # =====================================================
-# LOGIN ADMIN
+# LOGIN ADMIN & KARYAWAN
 # =====================================================
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
 
-    # Jika sudah login, langsung ke dashboard
+    # Jika sudah login
     if "admin" in session:
+        if session.get("role") == "karyawan":
+            return redirect(url_for("karyawan_dashboard"))
 
-        return redirect(
-            url_for("admin")
-        )
+        return redirect(url_for("admin"))
 
     if request.method == "POST":
 
@@ -189,7 +191,7 @@ def admin_login():
         )
 
         # ==========================
-        # VALIDASI FORM KOSONG
+        # VALIDASI FORM
         # ==========================
 
         if not username or not password:
@@ -204,25 +206,19 @@ def admin_login():
             )
 
         # ==========================
-        # CARI ADMIN
+        # CARI USER
         # ==========================
 
-        admin = Admin.query.filter_by(
+        user = Admin.query.filter_by(
             username=username
         ).first()
 
         # ==========================
-        # CEK ADMIN
+        # CEK USER & PASSWORD
         # ==========================
 
-        print("ADMIN DITEMUKAN:", admin)
-
-        # ==========================
-        # VALIDASI PASSWORD
-        # ==========================
-
-        if admin and check_password_hash(
-            admin.password,
+        if user and check_password_hash(
+            user.password,
             password
         ):
 
@@ -232,25 +228,38 @@ def admin_login():
 
             session.permanent = True
 
-            session["admin"] = admin.username
+            session["admin"] = user.username
+            session["role"] = user.role
 
             print(
-                "LOGIN SESSION:",
-                session
+                "LOGIN:",
+                user.username,
+                "ROLE:",
+                user.role
             )
 
             flash(
-                f"Selamat datang, {admin.fullname}.",
+                f"Selamat datang, {user.fullname}.",
                 "success"
             )
+
+            # ==========================
+            # REDIRECT BERDASARKAN ROLE
+            # ==========================
+
+            if user.role == "karyawan":
+
+                return redirect(
+                    url_for("karyawan_dashboard")
+                )
 
             return redirect(
                 url_for("admin")
             )
 
-        print(
-            "LOGIN GAGAL"
-        )
+        # ==========================
+        # LOGIN GAGAL
+        # ==========================
 
         flash(
             "Username atau Password salah.",
@@ -259,6 +268,293 @@ def admin_login():
 
     return render_template(
         "admin/login.html"
+    )
+
+# =====================================================
+# DASHBOARD KARYAWAN
+# =====================================================
+
+@app.route("/karyawan")
+def karyawan_dashboard():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+        return redirect(
+            url_for("admin_login")
+        )
+
+    # ==========================
+    # CEK ROLE
+    # ==========================
+
+    if session.get("role") != "karyawan":
+
+        return redirect(
+            url_for("admin")
+        )
+
+    # ==========================
+    # DATA KARYAWAN
+    # ==========================
+
+    karyawan = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+    # ==========================
+    # CEK DATA
+    # ==========================
+
+    if not karyawan:
+
+        session.clear()
+
+        flash(
+            "Data karyawan tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+    # ==========================
+    # STATISTIK
+    # ==========================
+
+    stats = get_dashboard_stats()
+
+    # ==========================
+    # RENDER
+    # ==========================
+
+    return render_template(
+        "karyawan/dashboard.html",
+        karyawan=karyawan,
+        **stats
+    )
+
+# =====================================================
+# LAPORAN KARYAWAN
+# =====================================================
+
+@app.route("/karyawan/laporan", methods=["GET", "POST"])
+def karyawan_laporan():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+        return redirect(url_for("admin_login"))
+
+    # ==========================
+    # CEK ROLE
+    # ==========================
+
+    if session.get("role") != "karyawan":
+        return redirect(url_for("admin"))
+
+    # ==========================
+    # AMBIL DATA KARYAWAN
+    # ==========================
+
+    karyawan = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+    if not karyawan:
+        session.clear()
+
+        flash(
+            "Data karyawan tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(url_for("admin_login"))
+
+    # ==========================
+    # JIKA FORM DIKIRIM
+    # ==========================
+
+    if request.method == "POST":
+
+        toll_gate = request.form.get(
+            "toll_gate",
+            ""
+        ).strip()
+
+        category = request.form.get(
+            "category",
+            ""
+        ).strip()
+
+        description = request.form.get(
+            "description",
+            ""
+        ).strip()
+
+        # ==========================
+        # VALIDASI
+        # ==========================
+
+        if not toll_gate or not category or not description:
+
+            flash(
+                "Gerbang tol, kategori, dan deskripsi wajib diisi.",
+                "warning"
+            )
+
+            return redirect(
+                url_for("karyawan_laporan")
+            )
+
+        # ==========================
+        # BUAT NOMOR TIKET
+        # ==========================
+
+        now = waktu_wib()
+
+        ticket_number = (
+            f"KR-{now.strftime('%Y%m%d%H%M%S')}"
+        )
+
+        # ==========================
+        # BUAT LAPORAN
+        # ==========================
+
+        ticket = Ticket(
+
+            ticket_number=ticket_number,
+
+            fullname=karyawan.fullname,
+
+            created_by=karyawan.username,
+
+            phone=karyawan.phone or "",
+
+            toll_gate=toll_gate,
+
+            category=category,
+
+            description=description,
+
+            status="Open"
+
+        )
+
+        # ==========================
+        # SIMPAN DATABASE
+        # ==========================
+
+        try:
+
+            db.session.add(ticket)
+            db.session.commit()
+
+            flash(
+                f"Laporan berhasil dibuat. Nomor tiket: {ticket_number}",
+                "success"
+            )
+
+            return redirect(
+                url_for("karyawan_data_laporan")
+            )
+
+        except Exception as e:
+
+            db.session.rollback()
+
+            print(
+                "ERROR LAPORAN KARYAWAN:",
+                e
+            )
+
+            flash(
+                "Gagal menyimpan laporan.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("karyawan_laporan")
+            )
+
+    # ==========================
+    # TAMPILKAN FORM
+    # ==========================
+
+    return render_template(
+        "karyawan/laporan.html",
+        karyawan=karyawan
+    )
+
+# =====================================================
+# DATA LAPORAN KARYAWAN
+# =====================================================
+
+@app.route("/karyawan/data-laporan")
+def karyawan_data_laporan():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+        return redirect(
+            url_for("admin_login")
+        )
+
+    # ==========================
+    # CEK ROLE
+    # ==========================
+
+    if session.get("role") != "karyawan":
+        return redirect(
+            url_for("admin")
+        )
+
+    # ==========================
+    # AMBIL DATA KARYAWAN
+    # ==========================
+
+    karyawan = Admin.query.filter_by(
+        username=session["admin"]
+    ).first()
+
+    if not karyawan:
+
+        session.clear()
+
+        flash(
+            "Data karyawan tidak ditemukan.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+    # ==========================
+    # AMBIL LAPORAN MILIK KARYAWAN
+    # ==========================
+
+    laporan = Ticket.query.filter_by(
+        created_by=karyawan.username
+    ).order_by(
+        Ticket.created_at.desc()
+    ).all()
+
+    # ==========================
+    # TAMPILKAN DATA
+    # ==========================
+
+    return render_template(
+        "karyawan/data_laporan.html",
+        laporan=laporan,
+        karyawan=karyawan
     )
 
 # =====================================================
@@ -794,6 +1090,190 @@ def admin_statistik():
         **stats
 
     )
+
+# =====================================================
+# KELOLA KARYAWAN
+# =====================================================
+
+@app.route("/admin/karyawan")
+def admin_karyawan():
+
+    # ==========================
+    # CEK LOGIN
+    # ==========================
+
+    if "admin" not in session:
+        return redirect(
+            url_for("admin_login")
+        )
+
+    # ==========================
+    # CEK ROLE
+    # ==========================
+
+    if session.get("role") != "admin":
+        return redirect(
+            url_for("karyawan_dashboard")
+        )
+
+    # ==========================
+    # AMBIL DATA KARYAWAN
+    # ==========================
+
+    karyawan = Admin.query.filter_by(
+        role="karyawan"
+    ).order_by(
+        Admin.fullname.asc()
+    ).all()
+
+    # ==========================
+    # TAMPILKAN
+    # ==========================
+
+    return render_template(
+        "admin/karyawan.html",
+        karyawan=karyawan
+    )
+
+# =====================================================
+# TAMBAH KARYAWAN
+# =====================================================
+
+@app.route("/admin/karyawan/tambah", methods=["GET", "POST"])
+def tambah_karyawan():
+
+    if "admin" not in session:
+        return redirect(
+            url_for("admin_login")
+        )
+
+    if session.get("role") != "admin":
+        return redirect(
+            url_for("karyawan_dashboard")
+        )
+
+    if request.method == "POST":
+
+        fullname = request.form.get(
+            "fullname",
+            ""
+        ).strip()
+
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip()
+
+        phone = request.form.get(
+            "phone",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+        if not fullname or not username or not password:
+
+            flash(
+                "Nama, username, dan password wajib diisi.",
+                "warning"
+            )
+
+            return redirect(
+                url_for("tambah_karyawan")
+            )
+
+        # Cek username
+        if Admin.query.filter_by(
+            username=username
+        ).first():
+
+            flash(
+                "Username sudah digunakan.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("tambah_karyawan")
+            )
+
+        # Cek email jika diisi
+        if email and Admin.query.filter_by(
+            email=email
+        ).first():
+
+            flash(
+                "Email sudah digunakan.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("tambah_karyawan")
+            )
+
+        # Buat akun karyawan
+        karyawan = Admin(
+
+            fullname=fullname,
+
+            username=username,
+
+            password=generate_password_hash(
+                password
+            ),
+
+            email=email or None,
+
+            phone=phone or None,
+
+            role="karyawan"
+
+        )
+
+        try:
+
+            db.session.add(karyawan)
+
+            db.session.commit()
+
+            flash(
+                "Karyawan berhasil ditambahkan.",
+                "success"
+            )
+
+            return redirect(
+                url_for("admin_karyawan")
+            )
+
+        except Exception as e:
+
+            db.session.rollback()
+
+            print(
+                "ERROR TAMBAH KARYAWAN:",
+                e
+            )
+
+            flash(
+                "Gagal menambahkan karyawan.",
+                "danger"
+            )
+
+            return redirect(
+                url_for("tambah_karyawan")
+            )
+
+    return render_template(
+        "admin/tambah_karyawan.html"
+    )
+
 # =====================================================
 # ABSENSI ADMIN
 # =====================================================

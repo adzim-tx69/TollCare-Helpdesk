@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Laporan - TollCare</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e3a5f;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 70px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        }
+
+        .logo {
+            color: #2563eb;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,.06);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #dbe2ea;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            font-family: Arial, sans-serif;
+
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px rgba(37,99,235,.1);
+        }
+
+        textarea {
+
+            min-height: 150px;
+
+            resize: vertical;
+        }
+
+        .help {
+
+            margin-top: 6px;
+
+            font-size: 13px;
+
+            color: #64748b;
+        }
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .btn {
+
+            border: none;
+
+            padding: 13px 22px;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: 600;
+        }
+
+        .btn:hover {
+
+            background: #1d4ed8;
+        }
+
+        /* =========================
+           FLASH MESSAGE
+        ========================= */
+
+        .flash {
+
+            padding: 13px 15px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+            .logo {
+
+                font-size: 20px;
+            }
+
+            .container {
+
+                padding: 20px;
+            }
+
+            .card {
+
+                padding: 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+
+            TollCare Helpdesk
+
+        </div>
+
+
+        <a
+            href="{{ url_for('karyawan_dashboard') }}"
+        >
+
+            Dashboard
+
+        </a>
+
+    </nav>
+
+
+    <!-- =========================
+         CONTENT
+    ========================= -->
+
+    <main class="container">
+
+
+        <a
+            href="{{ url_for('karyawan_dashboard') }}"
+            class="back"
+        >
+
+            ← Kembali ke Dashboard
+
+        </a>
+
+
+        <div class="card">
+
+
+            <h1>
+                Buat Laporan
+            </h1>
+
+
+            <p class="subtitle">
+
+                Silakan isi laporan dengan lengkap dan jelas.
+
+            </p>
+
+
+            <!-- =========================
+                 FLASH MESSAGE
+            ========================= -->
+
+            {% with messages = get_flashed_messages(
+                with_categories=true
+            ) %}
+
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                        <div class="flash">
+
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <!-- =========================
+                 FORM LAPORAN
+            ========================= -->
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+
+                <!-- NAMA -->
+
+                <div class="form-group">
+
+                    <label>
+                        Nama Pelapor
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ karyawan.fullname }}"
+                        readonly
+                    >
+
+                    <div class="help">
+                        Nama diambil dari akun yang sedang login.
+                    </div>
+
+                </div>
+
+
+                <!-- NOMOR HP -->
+
+                <div class="form-group">
+
+                    <label>
+                        Nomor Telepon
+                    </label>
+
+                    <input
+                        type="text"
+                        value="{{ karyawan.phone or '' }}"
+                        readonly
+                    >
+
+                    <div class="help">
+                        Nomor telepon diambil dari profil akun.
+                    </div>
+
+                </div>
+
+
+                <!-- GERBANG TOL -->
+
+                <div class="form-group">
+
+                    <label for="toll_gate">
+                        Gerbang Tol
+                    </label>
+
+                    <input
+                        type="text"
+                        id="toll_gate"
+                        name="toll_gate"
+                        placeholder="Contoh: Gerbang Tol Cibubur"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- KATEGORI -->
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Kategori
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                    >
+
+                        <option value="">
+                            Pilih kategori
+                        </option>
+
+                        <option value="Gangguan">
+                            Gangguan
+                        </option>
+
+                        <option value="Kecelakaan">
+                            Kecelakaan
+                        </option>
+
+                        <option value="Kondisi Jalan">
+                            Kondisi Jalan
+                        </option>
+
+                        <option value="Fasilitas">
+                            Fasilitas
+                        </option>
+
+                        <option value="Lainnya">
+                            Lainnya
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESKRIPSI -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Deskripsi Laporan
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Jelaskan kejadian atau masalah secara lengkap..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- FOTO -->
+
+                <div class="form-group">
+
+                    <label for="photo">
+                        Foto Laporan
+                    </label>
+
+                    <input
+                        type="file"
+                        id="photo"
+                        name="photo"
+                        accept="image/*"
+                    >
+
+                    <div class="help">
+                        Foto bersifat opsional.
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+
+                    Kirim Laporan
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>

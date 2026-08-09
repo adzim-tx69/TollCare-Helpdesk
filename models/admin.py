@@ -42,6 +42,16 @@ class Admin(db.Model):
         default="default.png"
     )
 
+    # ==========================
+    # ROLE
+    # ==========================
+
+    role = db.Column(
+        db.String(20),
+        nullable=False,
+        default="admin"
+    )
+
     created_at = db.Column(
         db.DateTime,
         server_default=db.func.now()
