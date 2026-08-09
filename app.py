@@ -17,8 +17,21 @@ from flask import (
 from io import BytesIO
 from datetime import datetime
 from datetime import timedelta
+from zoneinfo import ZoneInfo
 import os
 import uuid
+
+
+# =====================================================
+# TIMEZONE WIB
+# =====================================================
+
+WIB = ZoneInfo("Asia/Jakarta")
+
+
+def waktu_wib():
+    return datetime.now(WIB).replace(tzinfo=None)
+
 
 # =====================================================
 # DATABASE
@@ -465,7 +478,7 @@ def report():
 
             +
 
-            datetime.now().strftime(
+            waktu_wib().strftime(
                 "%Y%m%d%H%M%S"
             )
 
@@ -1708,7 +1721,7 @@ def complete_ticket(id):
 
     if ticket.status == "Selesai":
 
-        ticket.completed_at = datetime.now()
+        ticket.completed_at = waktu_wib()
 
     else:
 

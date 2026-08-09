@@ -1,5 +1,18 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
 from extensions import db
+
+
+# =====================================================
+# TIMEZONE WIB
+# =====================================================
+
+WIB = ZoneInfo("Asia/Jakarta")
+
+
+def waktu_wib():
+    return datetime.now(WIB).replace(tzinfo=None)
 
 
 class Ticket(db.Model):
@@ -101,17 +114,17 @@ class Ticket(db.Model):
 
 
     # ==========================
-    # WAKTU DIBUAT (WIB)
+    # WAKTU DIBUAT - WIB
     # ==========================
 
     created_at = db.Column(
         db.DateTime,
-        default=datetime.now
+        default=waktu_wib
     )
 
 
     # ==========================
-    # WAKTU SELESAI
+    # WAKTU SELESAI - WIB
     # ==========================
 
     completed_at = db.Column(
