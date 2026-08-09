@@ -224,3 +224,28 @@ table td{
     }
 
 }
+/* =========================================
+   HOME MENU CARDS
+========================================= */
+
+.home-cards {
+    align-items: stretch;
+}
+
+.home-cards > .col-md-4 {
+    display: flex;
+}
+
+.home-cards .card {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.home-cards .card-body {
+    min-height: 300px;
+}
+
+.home-cards .btn {
+    min-width: 150px;
+}
