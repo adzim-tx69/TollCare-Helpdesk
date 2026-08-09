@@ -1247,3 +1247,10 @@ body{
     }
 
 }
+
+.logo-image {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
